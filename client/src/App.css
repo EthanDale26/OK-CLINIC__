@@ -23,7 +23,7 @@ body {
 .auth-form {
   background: var(--card);
   border-radius: var(--radius);
-  box-shadow: 0 2px 24px rgba(60,60,120,0.07);
+  box-shadow: 0 2px 24px rgba(60, 60, 120, 0.07);
   padding: 2.2rem 2.3rem;
   max-width: 370px;
   margin: 36px auto 0;
@@ -108,5 +108,8 @@ body {
 }
 
 @media (max-width: 480px) {
-  .auth-form { min-width: 94vw; padding: 1.2rem; }
+  .auth-form {
+    min-width: 94vw;
+    padding: 1.2rem;
+  }
 }

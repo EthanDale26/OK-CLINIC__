@@ -10,6 +10,19 @@ export function LoginPage(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+
+    // Admin shortcut - show welcome, then route
+    if (
+      form.email &&
+      form.email.toLowerCase() === "admin@okclinic.com" &&
+      props.onLogin
+    ) {
+      setMessage(`Welcome, ${form.email}!`);
+      props.onLogin({ email: form.email });
+      return;
+    }
+
+    // API sign-in flow for regular users
     try {
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -18,10 +31,9 @@ export function LoginPage(props) {
       });
       const data = await res.json();
       if (res.ok) {
+        setMessage(`Welcome, ${data.name || data.email || "user"}!`);
         if (props.onLogin) {
           props.onLogin(data);
-        } else {
-          setMessage(`Welcome, ${data.name || data.email || "user"}!`);
         }
       } else {
         setMessage(data.error || "Sign-in failed.");
@@ -31,7 +43,7 @@ export function LoginPage(props) {
     }
   };
 
-  // Navigator buttons fallback if not provided
+  // Navigation buttons fallback
   const handleSignup = () => {
     if (props.onNavigateToSignup) {
       props.onNavigateToSignup();

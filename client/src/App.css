@@ -113,3 +113,427 @@ body {
     padding: 1.2rem;
   }
 }
+
+.admin-bg {
+  min-height: 100vh;
+  background: var(--background, #f4f7fd);
+}
+.admin-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--card, #fff);
+  border-bottom: 1px solid var(--border, #eee);
+  z-index: 50;
+}
+.admin-navbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.admin-navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+.admin-navbar-title {
+  color: var(--primary, #030213);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+}
+.admin-logout-btn {
+  background: none;
+  border: none;
+  color: var(--primary, #030213);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.admin-logout-btn:hover {
+  background: #eee;
+}
+.admin-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 1rem 1rem 1rem;
+  padding-top: 6rem;
+}
+.admin-tabs-list {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.admin-tab {
+  background: #f0f2f8;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.7rem 0.3rem;
+  font-size: 1.01rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s;
+  outline: none;
+}
+.admin-tab.active,
+.admin-tab:focus {
+  background: var(--primary, #3069e0);
+  color: #fff;
+  font-weight: 600;
+  border-color: var(--primary, #3069e0);
+}
+
+.dashboard-space {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.dashboard-section-title {
+  font-weight: 600;
+  margin-bottom: 0.2em;
+}
+.dashboard-muted {
+  color: #717182;
+  font-size: 0.98em;
+}
+.dashboard-card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5em;
+}
+@media (min-width: 768px) {
+  .dashboard-card-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.dashboard-card {
+  background: #fff;
+  border-radius: 1em;
+  box-shadow: 0 1px 3px #0001;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.dashboard-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5em;
+}
+.dashboard-card-content {
+  font-size: 1.6em;
+  color: #3069e0;
+  font-weight: 700;
+}
+.dashboard-metric-icon {
+  font-size: 1.2em;
+  margin-left: 0.3em;
+}
+.dashboard-list-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2em;
+  margin-top: 2em;
+}
+@media (min-width: 768px) {
+  .dashboard-list-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.dashboard-list-card {
+  background: #fff;
+  border-radius: 1em;
+  box-shadow: 0 1px 3px #0001;
+  padding: 1em;
+}
+.dashboard-list-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.dashboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.dashboard-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #eee;
+  border-radius: 0.6em;
+  padding: 0.9em 1em;
+}
+.dashboard-badge-paid {
+  color: #16a34a;
+  background: #bbf7d0;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.dashboard-badge-active {
+  color: #2563eb;
+  background: #e0e7ff;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.dashboard-badge-pending {
+  color: #eab308;
+  background: #fef9c3;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.dashboard-badge-inactive,
+.dashboard-badge-cancelled {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.dashboard-badge-unknown {
+  color: #475569;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.appointments-space {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.appointments-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.appointments-title {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 0.25em;
+}
+.appointments-muted {
+  color: #717182;
+  font-size: 0.97em;
+}
+.appointments-btn {
+  background: #3460ea;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.appointments-btn.add {
+  background: #3460ea;
+}
+.appointments-btn.outline {
+  background: #f3f3f5;
+  color: #3460ea;
+  border: 1px solid #b6caf7;
+}
+.appointments-btn.ghost {
+  background: none;
+  color: #3460ea;
+  border: none;
+  padding: 4px 8px;
+}
+.appointments-btn:hover {
+  background: #2440a7;
+}
+.appointments-btn.outline:hover {
+  background: #c7dbfe;
+}
+.appointments-btn.ghost:hover {
+  background: #e3eafd;
+}
+.appointments-btn-icon {
+  font-size: 1.1em;
+}
+.appointments-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.appointments-search-wrap {
+  position: relative;
+  flex: 1;
+}
+.appointments-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b1b5ba;
+}
+.appointments-search {
+  padding: 8px 8px 8px 36px;
+  font-size: 1em;
+  border-radius: 7px;
+  border: 1px solid #e3e3e3;
+  background: #f9fafb;
+  width: 100%;
+}
+.appointments-filter {
+  padding: 8px 10px;
+  font-size: 1em;
+  border-radius: 7px;
+  border: 1px solid #e3e3e3;
+  background: #fff;
+}
+.appointments-table-wrapper {
+  border-radius: 12px;
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  background: #fff;
+  box-shadow: 0 0.5px 3px #0001;
+}
+.appointments-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.appointments-table th,
+.appointments-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.appointments-table th {
+  color: #3460ea;
+  text-align: left;
+  background: #f5f8fe;
+  font-weight: 600;
+}
+.appointments-table tr:last-child td {
+  border-bottom: none;
+}
+.appointments-status-select {
+  border-radius: 6px;
+  padding: 4px 8px;
+  border: 1px solid #d2d7df;
+  font-size: 0.98em;
+}
+.appointments-status-scheduled {
+  background: #e0e7ff;
+  color: #3460ea;
+}
+.appointments-status-completed {
+  background: #bbf7d0;
+  color: #158466;
+}
+.appointments-status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.appointments-status-noshow {
+  background: #feedd9;
+  color: #b45309;
+}
+
+.dialog-backdrop {
+  position: fixed;
+  z-index: 130;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(75, 80, 105, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dialog-content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px #0003;
+  width: 98%;
+  max-width: 370px;
+  padding: 1.6em 1.3em 1em 1.3em;
+  position: relative;
+  z-index: 140;
+}
+.dialog-header h3 {
+  margin: 0;
+  font-size: 1.18em;
+  font-weight: 600;
+}
+.dialog-header p {
+  margin: 0.5em 0 1.2em 0;
+  color: #63667a;
+}
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+}
+.dialog-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.24em;
+}
+.dialog-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  margin-top: 1.4em;
+}
+.dialog-avail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dialog-avail-blocked {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fde7e7;
+  border: 1px solid #ffd3d3;
+  border-radius: 7px;
+  color: #b91c1c;
+  padding: 7px 10px;
+  font-size: 15px;
+}
+.dialog-avail-open {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #eafbec;
+  border: 1px solid #bff2d0;
+  border-radius: 7px;
+  color: #158466;
+  padding: 7px 10px;
+  font-size: 15px;
+}
+.dialog-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.dialog-dot.blocked {
+  background: #f43f5e;
+}
+.dialog-dot.open {
+  background: #22c55e;
+}

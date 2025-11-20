@@ -1,34 +1,71 @@
-import React, { useState } from 'react';
-import { LoginPage } from './components/LoginPage';
-import { SignupPage } from './components/SignupPage';
-import { PasswordResetPage } from './components/PasswordResetPage';
-import './App.css';
+import React, { useState } from "react";
+import { LoginPage } from "./components/LoginPage";
+import { SignupPage } from "./components/SignupPage";
+import { PasswordResetPage } from "./components/PasswordResetPage";
+import { AdminDashboard } from "./components/AdminDashboard";
+import "./App.css";
+
+const PAGES = {
+  LOGIN: "login",
+  SIGNUP: "signup",
+  RESET: "reset",
+  ADMIN: "admin",
+  // add other page keys here when you need them
+};
 
 function App() {
-  const [page, setPage] = useState('login');
+  const [page, setPage] = useState(PAGES.LOGIN);
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Navigation handlers for child components
-  const handleLoginNavigate = () => setPage('login');
-  const handleSignupNavigate = () => setPage('signup');
-  const handleResetNavigate = () => setPage('reset');
+  // Handler when login is successful
+  const handleLogin = (userData) => {
+    // TODO: Replace with backend logic later
+
+    // Check for admin email
+    if (
+      userData &&
+      userData.email &&
+      userData.email.toLowerCase() === "admin@okclinic.com"
+    ) {
+      setIsAdmin(true);
+      setUser(userData);
+      setPage(PAGES.ADMIN);
+    } else {
+      setIsAdmin(false);
+      setUser(userData);
+      // For non-admin, you can navigate to another page, e.g. a ProfilePage or HomePage
+      // For now, we'll just stay on the login page after "login" as a placeholder:
+      setPage(PAGES.LOGIN);
+    }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setIsAdmin(false);
+    setPage(PAGES.LOGIN);
+  };
 
   return (
     <div className="App">
-      {page === 'login' && (
+      {page === PAGES.LOGIN && (
         <LoginPage
-          onNavigateToSignup={handleSignupNavigate}
-          onNavigateToPasswordReset={handleResetNavigate}
+          onLogin={handleLogin}
+          onNavigateToSignup={() => setPage(PAGES.SIGNUP)}
+          onNavigateToPasswordReset={() => setPage(PAGES.RESET)}
         />
       )}
-      {page === 'signup' && (
+      {page === PAGES.SIGNUP && (
         <SignupPage
-          onNavigateToLogin={handleLoginNavigate}
+          onSignup={handleLogin}
+          onNavigateToLogin={() => setPage(PAGES.LOGIN)}
         />
       )}
-      {page === 'reset' && (
-        <PasswordResetPage
-          onNavigateToLogin={handleLoginNavigate}
-        />
+      {page === PAGES.RESET && (
+        <PasswordResetPage onNavigateToLogin={() => setPage(PAGES.LOGIN)} />
+      )}
+      {page === PAGES.ADMIN && (
+        <AdminDashboard user={user} onLogout={handleLogout} />
       )}
     </div>
   );

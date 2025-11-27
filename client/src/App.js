@@ -1,16 +1,28 @@
 import React, { useState } from "react";
+import { Navigation } from "./components/Navigation";
 import { LoginPage } from "./components/LoginPage";
 import { SignupPage } from "./components/SignupPage";
 import { PasswordResetPage } from "./components/PasswordResetPage";
 import { AdminDashboard } from "./components/AdminDashboard";
+import { ProfilePage } from './components/ProfilePage';
+import { BookingPage } from "./components/BookingPage";
+import { InvoicesPage } from "./components/InvoicesPage";
+import { FeedbackPage } from "./components/FeedbackPage";
+import { CheckoutPage } from "./components/CheckoutPage";
 import "./App.css";
+import './customer.css';
+
 
 const PAGES = {
   LOGIN: "login",
   SIGNUP: "signup",
   RESET: "reset",
   ADMIN: "admin",
-  // add other page keys here when you need them
+  PROFILE: "profile",
+  BOOKING: "booking",
+  INVOICES: "invoices",
+  FEEDBACK: "feedback",
+  CHECKOUT: "checkout"
 };
 
 function App() {
@@ -18,36 +30,68 @@ function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Handler when login is successful
-  const handleLogin = (userData) => {
-    // TODO: Replace with backend logic later
+  // Example state for pets & appointments, update/fetch as needed
+  const [pets, setPets] = useState([
+    { id: "p1", name: "Bella", species: "Dog", breed: "Labrador", age: 5 }
+  ]);
+  const [appointments, setAppointments] = useState([]);
+  const [pendingAppointment, setPendingAppointment] = useState(null);
 
-    // Check for admin email
-    if (
-      userData &&
-      userData.email &&
-      userData.email.toLowerCase() === "admin@okclinic.com"
-    ) {
+  // Navigation handler - robust to missing/invalid page keys
+  const handleNavigate = (nextPage) => {
+    const p = (nextPage || "").toLowerCase();
+    setPage(PAGES[p.toUpperCase()] || PAGES.PROFILE);
+  };
+
+  // Login handler
+  const handleLogin = (userData) => {
+    if (userData && userData.email && userData.email.toLowerCase() === "admin@okclinic.com") {
       setIsAdmin(true);
       setUser(userData);
       setPage(PAGES.ADMIN);
     } else {
       setIsAdmin(false);
       setUser(userData);
-      // For non-admin, you can navigate to another page, e.g. a ProfilePage or HomePage
-      // For now, we'll just stay on the login page after "login" as a placeholder:
-      setPage(PAGES.LOGIN);
+      setPage(PAGES.PROFILE);
     }
   };
 
+  // Logout handler
   const handleLogout = () => {
     setUser(null);
     setIsAdmin(false);
     setPage(PAGES.LOGIN);
   };
 
+  // Appointment booking handler
+  const handleBookingComplete = (details) => {
+    setPendingAppointment(details);
+    setPage(PAGES.CHECKOUT);
+  };
+
+  // Payment complete handler
+  const handlePaymentComplete = () => {
+    if (pendingAppointment) {
+      setAppointments((prev) => [
+        ...prev,
+        { ...pendingAppointment, id: Date.now().toString(), status: "upcoming" }
+      ]);
+      setPendingAppointment(null);
+    }
+    setPage(PAGES.PROFILE);
+  };
+
+  const showNav = ![PAGES.LOGIN, PAGES.SIGNUP, PAGES.RESET].includes(page);
+
   return (
     <div className="App">
+      {showNav && (
+        <Navigation
+          currentPage={page}
+          onNavigate={handleNavigate}
+          onLogout={handleLogout}
+        />
+      )}
       {page === PAGES.LOGIN && (
         <LoginPage
           onLogin={handleLogin}
@@ -66,6 +110,40 @@ function App() {
       )}
       {page === PAGES.ADMIN && (
         <AdminDashboard user={user} onLogout={handleLogout} />
+      )}
+      {page === PAGES.PROFILE && (
+        <ProfilePage
+          user={user}
+          pets={pets}
+          appointments={appointments}
+          onNavigate={handleNavigate}
+        />
+      )}
+      {page === PAGES.BOOKING && (
+        <BookingPage
+          user={user}
+          pets={pets}
+          appointments={appointments}
+          onBookingComplete={handleBookingComplete}
+          onNavigate={handleNavigate}
+        />
+      )}
+      {page === PAGES.CHECKOUT && (
+        <CheckoutPage
+          appointment={pendingAppointment}
+          user={user}
+          onPaymentComplete={handlePaymentComplete}
+          onNavigate={handleNavigate}
+        />
+      )}
+      {page === PAGES.INVOICES && (
+        <InvoicesPage
+          user={user}
+          onNavigate={handleNavigate}
+        />
+      )}
+      {page === PAGES.FEEDBACK && (
+        <FeedbackPage user={user} onNavigate={handleNavigate} />
       )}
     </div>
   );

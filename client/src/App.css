@@ -1497,3 +1497,24 @@ select,
   background-color: var(--card);
   border-bottom: 1px solid var(--border);
 }
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: 500;
+  padding: 0.35rem 1.1rem;
+  border: 1px solid #020617;
+  font-size: 0.9rem;
+}
+
+.btn-pill-primary {
+  background-color: #020617;
+  color: #ffffff;
+}
+
+.btn-pill-outline {
+  background-color: #ffffff;
+  color: #020617;
+}

@@ -1,439 +1,699 @@
-body {
-  background: #fafbfc;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  color: #18181b;
-  margin: 0;
+/* ---------- Design tokens ---------- */
+
+:root {
+  --color-background: #f5f5f7;
+  --color-foreground: #111827;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #111827;
+
+  --color-primary: #2563eb;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #e5e7eb;
+  --color-secondary-foreground: #111827;
+
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+
+  --color-accent: #eff6ff;
+
+  --color-border: #e5e7eb;
+  --color-input: #d1d5db;
+
+  --color-ring: #2563eb;
+
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 }
+
+/* ---------- Global base ---------- */
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* ---------- Layout utilities (Tailwind-like) ---------- */
 
 .container {
-  max-width: 1040px;
-  margin: 36px auto 0 auto;
-  padding: 0 24px 48px 24px;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-h1 {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 18px 0;
-  letter-spacing: 0.01em;
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* ----- HEADER AND TOP BUTTONS ----- */
+.p-6 {
+  padding: 1.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
 .flex {
   display: flex;
 }
-.justify-between { justify-content: space-between; }
-.items-center { align-items: center; }
-.gap-2 { gap: 8px; }
-.mb-4 { margin-bottom: 16px; }
 
-.button, .primary-button, .ghost-button {
-  font-size: 15px;
-  font-weight: 500;
-  padding: 7px 18px;
-  border-radius: 7px;
-  cursor: pointer;
-  outline: none;
-  transition: background .14s;
-  border: 1px solid #191924;
-}
-.button, .primary-button {
-  background: #191924;
-  color: #fff;
-  border: 1px solid #191924;
-}
-.ghost-button, .button[variant="outline"], .button.outline {
-  background: #fff;
-  color: #191924;
-  border: 1px solid #dde0e6;
-  margin-left: 8px;
-}
-.button:disabled { background: #b2b2bd; color: #fff; cursor: not-allowed; }
-
-/* ----- CARD STYLES ----- */
-.card {
-  border-radius: 10px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.025);
-  margin-bottom: 24px;
-}
-.rounded-xl { border-radius: 10px; }
-
-.CardHeader, .card-header, .p-6, .pt-0 { padding: 24px; }
-.CardContent, .card-content, .p-4 { padding: 18px 24px; }
-.card-title, .text-2xl { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-.card-description, .text-muted-foreground, .card-desc { color: #7b8193; font-size: 14px; margin-bottom: 4px;}
-
-.card-edit-button, Button[variant='outline'], .Edit {
-  background: #fff;
-  border: 1px solid #e2e4ea;
-  padding: 7px 13px;
-  border-radius: 7px;
-  color: #24243c;
-  font-size: 15px;
-  cursor: pointer;
+.inline-flex {
+  display: inline-flex;
 }
 
-/* --- PERSONAL INFO GRID --- */
-.grid { display: grid; }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.gap-4 { gap: 16px; }
-
-.text-muted-foreground { color: #7b8193; font-size: 14px; }
-.text-sm { font-size: 15px; }
-label, .Label { font-weight: 500; font-size: 15px; margin-bottom: 4px; display:block; }
-
-input, .Input {
-  border: 1px solid #e4e7ec;
-  background: #f3f3f5;
-  padding: 10px 13px;
-  font-size: 15px;
-  border-radius: 7px;
-  margin-bottom: 4px;
-}
-
-.space-y-4 > * + * { margin-top: 14px; }
-.space-y-6 > * + * { margin-top: 24px; }
-
-/* ------- APPOINTMENTS CARD ---------- */
-.appointment-item, .border-2 {
-  background: #f7f8fa;
-  border: 2px solid #ececf0;
-  border-radius: 10px;
-  margin-bottom: 16px;
-}
-
-.bg-muted { background: #edeef7 !important; }
-.bg-green-50 { background: #eafbe6 !important; }
-.text-green-600 { color: #259a58 !important; }
-.text-amber-600 { color: #d59e00 !important; }
-
-.calendar-icon, .w-5, .h-5 {
-  width: 18px; height: 18px; vertical-align: middle;
-}
-.apt-type-badge, .Badge {
-  background: #edeef7;
-  color: #21216b;
-  border-radius: 5px;
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-left: 12px;
-  border: 1px solid #dde0e6;
-}
-.Badge[variant="secondary"] { background: #eafbe6; color: #1c7034; border: 1px solid #b5e4be;}
-.Badge[variant="outline"] { background: #f7f7fa; color: #595960; border: 1px solid #dae0e6; }
-
-.flex.items-start { align-items: flex-start; }
-.flex.items-center { align-items: center; }
-.gap-3 { gap: 12px; }
-.gap-2 { gap: 8px; }
-
-.text-xs { font-size: 12px; color: #9494b4;}
-.text-sm { font-size: 14px; }
-
-.pt-2 { padding-top: 10px !important; }
-.border-t { border-top: 1px solid #ececf0 !important; }
-.rounded-lg { border-radius: 10px !important; }
-.bg-green-50 { background: #eafbe6 !important; }
-
-/* ------- PETS ------ */
-.pets-list {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.flex.items-center.space-x-4 > * + * { margin-left: 12px; }
-.pets-header { 
-  display: flex; justify-content: space-between; align-items: center; 
-  font-size: 16px; font-weight: 600;
-  margin-bottom: 6px;
-}
-.pet-item, .flex.justify-between.items-center.p-4.border.rounded-lg {
-  background: #f7f7fa;
-  border: 1px solid #ececf0;
-  border-radius: 8px;
-  font-size: 15px;
-  color: #34344a;
-  display: flex;
+.items-center {
   align-items: center;
-  padding: 12px 18px;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.justify-between {
   justify-content: space-between;
 }
-.pet-details { color: #7b8193; font-size: 14px; margin-left: 8px;}
-.pet-badge { 
-  background: #f3f3f7;
-  color: #595960;
-  font-size: 11px;
-  font-weight: 500;
-  border-radius: 6px;
-  padding: 3px 11px;
-  margin-left: 8px;
-  display: inline-block;
-}
 
-.icon-button, .Button[variant="ghost"] {
-  background: #f4f4fe;
-  border: none;
-  color: #222272;
-  border-radius: 7px;
-  padding: 3px 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.13s;
-}
-.icon-button:hover, .Button[variant="ghost"]:hover {
-  background: #e5e8fa;
-}
-
-/* ------ NOTES AND SERVICES ------ */
-.appointment-services, .space-y-2 > * + * { margin-top: 7px; }
-.service-item, .flex.justify-between.items-center {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 14px; color: #353559;
-  margin-bottom: 1px;
-}
-.service-price { color: #8f8f9f; min-width: 48px; text-align: right; font-size: 14px;}
-.appointment-notes, .text-muted-foreground.mb-1 { 
-  font-size: 13px; color: #59597b !important; margin-bottom: 2px; 
-}
-.notes-value, .text-sm.bg-muted.p-2.rounded {
-  background: #edeef7;
-  font-size: 13px; 
-  border-radius: 7px;
-  padding: 5px 12px;
-  color: #59597b;
-}
-
-.amount-value, .deposit-value, .text-green-600 { color: #0a8451; font-weight: 500; margin-left: 4px; }
-.summary-note, .text-xs.text-muted-foreground { color: #6c6c75; font-size: 13px;}
-.apt-free-block { display: flex; flex-direction: column; background: #eafbe6; border-radius: 8px; padding: 7px 14px; gap: 3px;}
-
-/* ------ EMPTY STATE ------ */
-.text-center { text-align: center; }
-.opacity-50 { opacity: .5; }
-.mx-auto { margin-left: auto; margin-right: auto; }
-
-/* --- General Utilities --- */
-.mt-4 { margin-top: 16px !important; }
-.mb-4 { margin-bottom: 16px !important; }
-
-
-/* ---- Book Appointment Layout ---- */
-.booking-container {
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
-  padding: 0 24px 56px 24px;
-}
-.booking-title {
-  font-size: 21px;
-  font-weight: 600;
-  margin-bottom: 3px;
-}
-.booking-step {
-  color: #888;
-  font-size: 14px;
-  margin-bottom: 23px;
-}
-.booking-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1.1fr;
-  gap: 24px;
-}
-@media (max-width: 1024px) {
-  .booking-grid { grid-template-columns: 1fr; }
-}
-
-/* --- Card style for each section --- */
-.booking-card {
-  background: #fff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-  margin-bottom: 14px;
-  padding: 22px 22px 18px 22px;
-}
-
-/* --- Select Pet --- */
-.pet-list {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-.pet-tile {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #f8fafd;
-  border: 1.5px solid #dadbe7;
-  border-radius: 8px;
-  padding: 15px 20px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-.pet-tile.selected {
-  background: #f2f4ff;
-  border: 2.5px solid #1e40af;
-  box-shadow: 0 0 0 2px #ccd4fe;
-}
-.pet-kind-badge {
-  margin-left: 9px;
-  background: #f3f3f7;
-  color: #222272;
-  border-radius: 6px;
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 3px 10px;
-  border: 1px solid #e0e2ef;
-}
-
-.pet-tile .pet-details {
-  color: #767a89;
-  font-size: 14px;
-}
-
-/* --- Select Date (calendar card) --- */
-.calendar-card {
-  margin-bottom: 14px;
-}
-.calendar-legend {
-  margin-top: 13px;
-  font-size: 13px;
-}
-.calendar-legend-row {
-  display: flex;
-  gap: 23px;
-  margin-top: 6px;
-}
-.calendar-dot {
-  width: 16px; height: 16px; border-radius: 4px; border: 1px solid #ddd; display: inline-block; margin-right: 7px;
-}
-.dot-available    { background: #eafbe6; border-color: #bde9cd; }
-.dot-limited      { background: #fffbe7; border-color: #ffe082; }
-.dot-booked       { background: #fbe6e6; border-color: #fec1c1; }
-
-/* --- Select Time --- */
-.booking-card.timeslot-container {
-  min-height: 148px;
-  display: flex;
-  flex-direction: column;
+.justify-center {
   justify-content: center;
-  align-items: center;
 }
-.timeslot-empty-state {
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.text-center {
   text-align: center;
-  color: #888;
-  font-size: 15px;
-  padding: 22px 0;
 }
-.timeslot-calendar-icon {
-  font-size: 40px;
-  color: #ddd;
-  margin-bottom: 8px;
-}
-.timeslot-grid {
+
+/* Grid */
+
+.grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(62px, 1fr));
-  gap: 15px;
-  margin-top: 4px;
 }
-.time-btn {
-  background: #fff;
-  color: #1f1f2f;
-  border: 1.5px solid #e3e3ea;
-  border-radius: 7px;
-  padding: 8px 0;
-  text-align: center;
-  font-size: 15px;
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Typography ---------- */
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-medium {
   font-weight: 500;
+}
+
+.text-muted-foreground {
+  color: var(--color-muted-foreground);
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+/* ---------- Card primitives (Card, CardHeader, etc.) ---------- */
+
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.border {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--color-border);
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.bg-card {
+  background-color: var(--color-card);
+}
+
+.text-card-foreground {
+  color: var(--color-card-foreground);
+}
+
+.shadow {
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.15);
+}
+
+/* Card sections */
+.flex-col {
+  flex-direction: column;
+}
+
+.space-y-1\.5 > * + * {
+  margin-top: 0.375rem;
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+  font-family: inherit;
+  border: none;
   cursor: pointer;
-  transition: all 0.15s;
 }
-.time-btn.selected {
-  background: #21216b;
-  color: #fff;
-  border: 1.5px solid #21216b;
+
+/* base from component */
+.button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
 }
-.time-btn:disabled {
-  background: #f5f6fa;
-  color: #b6b7bb;
-  border-color: #ececf0;
+
+/* default variant */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.text-primary-foreground {
+  color: var(--color-primary-foreground);
+}
+
+.bg-primary:hover {
+  filter: brightness(0.9);
+}
+
+/* outline variant */
+.border-border {
+  border: 1px solid var(--color-border);
+}
+
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.hover\:bg-accent:hover {
+  background-color: var(--color-accent);
+}
+
+.hover\:text-accent-foreground:hover {
+  color: var(--color-foreground);
+}
+
+/* ghost variant */
+.hover\:bg-accent:hover {
+  background-color: var(--color-accent);
+}
+
+/* sizes */
+.h-8 {
+  height: 2rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Disabled state mimic (if you add disabled attr) */
+button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* --- Appointment Summary --- */
-.summary-card .card-header {
-  font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 2px;
+/* ---------- Inputs ---------- */
+
+input {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 0.875rem;
 }
-.summary-row {
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.rounded-md {
+  border-radius: var(--radius-md);
+}
+
+.border-input {
+  border: 1px solid var(--color-input);
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+input::placeholder {
+  color: var(--color-muted-foreground);
+}
+
+/* ---------- Labels ---------- */
+
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Badges ---------- */
+
+.badge,
+.inline-flex.items-center.px-2\.5 {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.text-secondary-foreground {
+  color: var(--color-secondary-foreground);
+}
+
+.border-border {
+  border-color: var(--color-border);
+}
+
+/* ---------- Separator component ---------- */
+
+.bg-border {
+  background-color: var(--color-border);
+}
+
+.h-px {
+  height: 1px;
+}
+
+/* ---------- Muted panels, success/warning colors ---------- */
+
+.bg-muted {
+  background-color: var(--color-muted);
+}
+
+.text-green-600 {
+  color: rgb(22 163 74);
+}
+
+.text-amber-600 {
+  color: rgb(217 119 6);
+}
+
+/* ---------- Profile-specific overrides (from your ProfilePage.css idea) ---------- */
+
+.profile-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-header,
+.pets-header {
   display: flex;
   justify-content: space-between;
-  padding: 3px 0;
+  align-items: center;
 }
-.summary-label { color: #767a89; font-size: 14px; }
-.summary-value { font-size: 15px; }
-.summary-divider { border-top: 1px solid #ececf0; margin: 15px 0 8px 0; }
 
-.next-btn {
-  width: 100%; 
-  font-size: 15.3px;
-  font-weight: 600;
-  background: #22223c;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  padding: 9px 0;
-  cursor: pointer;
-  margin-top: 18px;
-  transition: background 0.16s;
+.profile-header-buttons,
+.add-pet-buttons {
+  display: flex;
+  gap: 0.5rem;
 }
-.next-btn:disabled {
-  background: #d1d4dc;
-  color: #868ca1;
-  cursor: not-allowed;
+
+.profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.summary-note {
+
+.profile-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-grid-2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-info-label {
+  color: var(--color-muted-foreground);
+}
+
+/* Appointments */
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.appointment-card {
+  border: 2px solid var(--color-border);
+  padding: 1rem;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.appointment-date-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.appointment-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+}
+
+.appointment-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-muted-foreground);
+}
+
+.appointment-time-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Pets */
+
+.pet-info-label {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.pet-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pet-details-text {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+}
+
+/* Services */
+
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-muted-foreground);
+}
+
+.service-name {
+  font-size: 0.875rem;
+}
+
+.service-duration {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+}
+
+.service-price {
+  font-size: 0.875rem;
+}
+
+/* Notes */
+
+.appointment-notes {
+  font-size: 0.875rem;
+  background-color: var(--color-muted);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+}
+
+/* Payment */
+
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-free {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(240 253 244);
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+}
+
+.payment-free-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-free-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgb(22 163 74);
+}
+
+.payment-free-text {
+  font-size: 0.875rem;
+}
+
+.payment-free-subtext {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+}
+
+.payment-row,
+.payment-balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-balance-row {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.payment-row-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-label {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground);
+}
+
+.payment-label-with-status {
+  font-size: 0.875rem;
+}
+
+.payment-status-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.payment-status-success {
+  color: rgb(22 163 74);
+}
+
+.payment-status-warning {
+  color: rgb(217 119 6);
+}
+
+.payment-balance-due {
+  color: rgb(22 163 74);
+}
+
+.payment-note {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+}
+
+/* Empty state */
+
+.empty-appointments {
   text-align: center;
-  color: #7b8193;
-  font-size: 14px;
-  margin-top: 7px;
+  padding: 2rem 0;
 }
 
-/* --- Additional Notes --- */
-.additional-notes-card {
-  background: #fff;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  padding: 22px;
-  margin-top: 8px;
-}
-.textarea-notes {
-  background: #f6f7fa;
-  border-radius: 7px;
-  border: 1.5px solid #ebecf1;
-  width: 100%;
-  min-height: 58px;
-  padding: 10px 15px;
-  font-size: 15px;
-  resize: vertical;
-  margin-top: 8px;
-  color: #232336;
+.empty-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-muted-foreground);
+  margin: 0 auto 1rem;
+  opacity: 0.5;
 }
 
-.booking-label-title {
-  color: #232336;
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 7px;
+.empty-text {
+  color: var(--color-muted-foreground);
+  margin-bottom: 1rem;
 }
-.booking-label-desc {
-  color: #888e9b;
-  font-size: 13.5px;
-  margin-bottom: 12px;
+
+/* Pets list */
+
+.pet-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.pet-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pet-details-container {
+  color: var(--color-muted-foreground);
+}
+
+/* Add pet form */
+
+.add-pet-form {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }

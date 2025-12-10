@@ -10,17 +10,88 @@ export function SignupPage(props) {
     confirm: "",
   });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // email verification state
+  const [verificationCode, setVerificationCode] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // 1) send verification code to email
+  const handleSendCode = async () => {
+    setMessage("");
+    if (!form.email) {
+      setMessage("Please enter your email first.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/send-signup-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage(data.error || "Failed to send verification code.");
+      } else {
+        setCodeSent(true);
+        setMessage("Verification code sent to your email.");
+      }
+    } catch {
+      setMessage("Error connecting to server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 2) verify code
+  const handleVerifyCode = async () => {
+    setMessage("");
+    if (!form.email || !verificationCode) {
+      setMessage("Enter your email and verification code.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/verify-signup-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email, code: verificationCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setEmailVerified(false);
+        setMessage(data.error || "Invalid or expired code.");
+      } else {
+        setEmailVerified(true);
+        setMessage("Email verified. You can now create your account.");
+      }
+    } catch {
+      setMessage("Error connecting to server.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 3) final signup (requires emailVerified)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+
+    if (!emailVerified) {
+      setMessage("Please verify your email before signing up.");
+      return;
+    }
+
     if (form.password !== form.confirm) {
       setMessage("Passwords do not match.");
       return;
     }
+
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -55,6 +126,7 @@ export function SignupPage(props) {
       <div className="icon-heart">&#9825;</div>
       <h2>Join OK Clinic</h2>
       <p>Create your account to get started</p>
+
       <form onSubmit={handleSubmit}>
         <label>Full Name</label>
         <input
@@ -64,6 +136,7 @@ export function SignupPage(props) {
           required
           onChange={handleChange}
         />
+
         <label>Email</label>
         <input
           name="email"
@@ -71,8 +144,48 @@ export function SignupPage(props) {
           placeholder="Enter your email"
           value={form.email}
           required
-          onChange={handleChange}
+          onChange={(e) => {
+            setEmailVerified(false); // reset verification if email changes
+            setCodeSent(false);
+            handleChange(e);
+          }}
         />
+        <div style={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+          <button
+            type="button"
+            onClick={handleSendCode}
+            disabled={loading || !form.email}
+          >
+            {loading ? "Sending..." : codeSent ? "Resend Code" : "Send Code"}
+          </button>
+        </div>
+
+        {codeSent && (
+          <>
+            <label>Verification Code</label>
+            <input
+              name="verificationCode"
+              placeholder="Enter 6-digit code"
+              value={verificationCode}
+              maxLength={6}
+              onChange={(e) => setVerificationCode(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={handleVerifyCode}
+              disabled={loading || !verificationCode}
+            >
+              {loading ? "Verifying..." : "Verify Email"}
+            </button>
+          </>
+        )}
+
+        {emailVerified && (
+          <div className="message" style={{ color: "green" }}>
+            Email verified.
+          </div>
+        )}
+
         <label>Phone Number</label>
         <input
           name="phone"
@@ -80,6 +193,7 @@ export function SignupPage(props) {
           value={form.phone}
           onChange={handleChange}
         />
+
         <label>Address</label>
         <input
           name="address"
@@ -87,6 +201,7 @@ export function SignupPage(props) {
           value={form.address}
           onChange={handleChange}
         />
+
         <label>Password</label>
         <input
           name="password"
@@ -96,6 +211,7 @@ export function SignupPage(props) {
           required
           onChange={handleChange}
         />
+
         <label>Confirm Password</label>
         <input
           name="confirm"
@@ -105,8 +221,11 @@ export function SignupPage(props) {
           required
           onChange={handleChange}
         />
+
         <button type="submit">Create Account</button>
+
         {message && <div className="message">{message}</div>}
+
         <div className="links">
           <span>
             Already have an account?{" "}

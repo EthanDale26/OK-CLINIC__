@@ -1,0 +1,307 @@
+/* ProfilePage.css */
+
+/* Main container */
+.profile-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header section */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Card sections */
+.profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Grid layouts */
+.profile-grid-2col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* User information display */
+.profile-info-label {
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+/* Appointments section */
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.appointment-card {
+  border: 2px solid var(--color-border, #e5e7eb);
+  padding: 1rem;
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.appointment-date-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.appointment-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary, #2563eb);
+}
+
+.appointment-time {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+.appointment-time-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Pet info */
+.pet-info-label {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground, #6b7280);
+  margin-bottom: 0.25rem;
+}
+
+.pet-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pet-details-text {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+/* Services list */
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+.service-name {
+  font-size: 0.875rem;
+}
+
+.service-duration {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+.service-price {
+  font-size: 0.875rem;
+}
+
+/* Notes */
+.appointment-notes {
+  font-size: 0.875rem;
+  background-color: var(--color-muted, #f3f4f6);
+  padding: 0.5rem;
+  border-radius: var(--radius-md, 0.375rem);
+}
+
+/* Payment info */
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-free {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(240 253 244);
+  padding: 0.75rem;
+  border-radius: var(--radius-lg, 0.5rem);
+}
+
+.dark .payment-free {
+  background-color: rgb(5 46 22);
+}
+
+.payment-free-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-free-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgb(22 163 74);
+}
+
+.payment-free-text {
+  font-size: 0.875rem;
+}
+
+.payment-free-subtext {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+.payment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-row-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-label {
+  font-size: 0.875rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+.payment-label-with-status {
+  font-size: 0.875rem;
+}
+
+.payment-status-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.payment-status-success {
+  color: rgb(22 163 74);
+}
+
+.payment-status-warning {
+  color: rgb(217 119 6);
+}
+
+.payment-balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+}
+
+.payment-balance-due {
+  color: rgb(22 163 74);
+}
+
+.payment-note {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+/* Empty state */
+.empty-appointments {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.empty-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-muted-foreground, #6b7280);
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+}
+
+.empty-text {
+  color: var(--color-muted-foreground, #6b7280);
+  margin-bottom: 1rem;
+}
+
+/* Pets section */
+.pets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pet-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-lg, 0.5rem);
+}
+
+.pet-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pet-details-container {
+  color: var(--color-muted-foreground, #6b7280);
+}
+
+/* Add pet form */
+.add-pet-form {
+  padding: 1rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-lg, 0.5rem);
+  background-color: var(--color-muted, #f3f4f6);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-pet-buttons {
+  display: flex;
+  gap: 0.5rem;
+}

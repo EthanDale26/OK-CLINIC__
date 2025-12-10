@@ -1,36 +1,56 @@
+// src/pages/PasswordResetPage.jsx
 import React, { useState } from "react";
-// import "./auth-form.css";
 
 export function PasswordResetPage(props) {
   const [email, setEmail] = useState("");
-  const [step, setStep] = useState("request");
+  const [step, setStep] = useState("request"); // "request" | "sent" | "reset"
   const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const API_BASE = "http://localhost:5000/api/auth";
+
   const handleRequestReset = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setLoading(false);
-    setStep("sent");
-    setMessage('For demo only: a reset code has been "sent" to your email.');
+    try {
+      const res = await fetch(`${API_BASE}/request-reset`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send reset code");
+      setStep("sent");
+      setMessage("A reset code has been sent to your email.");
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setLoading(false);
-    if (resetCode === "123456") {
+    try {
+      const res = await fetch(`${API_BASE}/verify-reset-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, resetCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Invalid code");
       setStep("reset");
       setMessage("Code verified successfully. You can now set a new password.");
-    } else {
-      setMessage("Invalid code. Please try again.");
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,11 +66,20 @@ export function PasswordResetPage(props) {
       return;
     }
     setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setLoading(false);
-    setMessage("Password reset successful! (demo only)");
-    if (props.onNavigateToLogin) {
-      props.onNavigateToLogin();
+    try {
+      const res = await fetch(`${API_BASE}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, resetCode, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to reset password");
+      setMessage("Password reset successful!");
+      if (props.onNavigateToLogin) props.onNavigateToLogin();
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +87,7 @@ export function PasswordResetPage(props) {
     if (props.onNavigateToLogin) {
       props.onNavigateToLogin();
     } else {
-      setMessage("Back to login navigation not implemented in this demo.");
+      setMessage("Back to login navigation not implemented.");
     }
   };
 
@@ -66,6 +95,7 @@ export function PasswordResetPage(props) {
     <div className="auth-form">
       <div className="icon-heart">&#9825;</div>
       <h2>Password Reset</h2>
+
       {step === "request" && (
         <>
           <p>Enter your email to receive a reset code</p>
@@ -90,10 +120,7 @@ export function PasswordResetPage(props) {
       {step === "sent" && (
         <>
           <p>
-            We've “sent” a 6-digit verification code to <strong>{email}</strong>
-            .
-            <br />
-            For this demo, use code 123456.
+            We've sent a 6-digit verification code to <strong>{email}</strong>.
           </p>
           <form onSubmit={handleVerifyCode}>
             <label>Verification Code</label>
@@ -105,7 +132,6 @@ export function PasswordResetPage(props) {
               maxLength={6}
               required
             />
-            <p className="text-xs">For demo purposes, use code: 123456</p>
             <button type="submit" disabled={loading}>
               {loading ? "Verifying..." : "Verify Code"}
             </button>

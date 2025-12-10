@@ -146,7 +146,7 @@ export function CheckoutPage({
       invoiceNumber: `INV-${Date.now()}`,
       date: today,
       dueDate: today,
-      // status, paymentMethod, paidDate will be set by routes/invoice.js
+     
     };
 
     const res = await fetch("http://localhost:5000/api/invoices", {

@@ -9,23 +9,24 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import "./customer.css";
+import "../edit/ProfilePage.css";
+
 
 /* ---------- Reusable UI primitives ---------- */
 
-function Card({ children, ...props }) {
+function Card({ children, className = "", ...props }) {
   return (
     <div
-      className="rounded-xl border bg-card text-card-foreground shadow"
+      className={`rounded-xl border bg-card text-card-foreground shadow ${className}`}
       {...props}
     >
       {children}
     </div>
   );
 }
-function CardHeader({ children, ...props }) {
+function CardHeader({ children, className = "", ...props }) {
   return (
-    <div className="flex flex-col space-y-1.5 p-6" {...props}>
+    <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -40,9 +41,9 @@ function CardTitle({ children }) {
 function CardDescription({ children }) {
   return <p className="text-muted-foreground text-sm">{children}</p>;
 }
-function CardContent({ children, ...props }) {
+function CardContent({ children, className = "", ...props }) {
   return (
-    <div className="p-6 pt-0" {...props}>
+    <div className={`p-6 pt-0 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -81,7 +82,7 @@ function Button({
 function Input(props) {
   return (
     <input
-      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:text-muted-foreground"
+      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
       {...props}
     />
   );
@@ -89,14 +90,14 @@ function Input(props) {
 function Label({ children, ...props }) {
   return (
     <label
-      className="text-sm font-medium leading-none mb-2 block peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      className="text-sm font-medium leading-none mb-2 block"
       {...props}
     >
       {children}
     </label>
   );
 }
-function Badge({ children, variant = "default", ...props }) {
+function Badge({ children, variant = "default", className = "", ...props }) {
   const variants = {
     default:
       "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary text-primary-foreground",
@@ -106,7 +107,7 @@ function Badge({ children, variant = "default", ...props }) {
       "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border border-border",
   };
   return (
-    <span className={variants[variant] || ""} {...props}>
+    <span className={`${variants[variant] || ""} ${className}`} {...props}>
       {children}
     </span>
   );
@@ -215,10 +216,11 @@ export function ProfilePage({
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="profile-container">
+      {/* Header */}
+      <div className="profile-header">
         <h1 className="text-2xl font-semibold">My Profile</h1>
-        <div className="flex gap-2">
+        <div className="profile-header-buttons">
           <Button onClick={() => onNavigate("booking")}>
             <Calendar className="w-4 h-4 mr-2" />
             Book Appointment
@@ -239,7 +241,7 @@ export function ProfilePage({
       {/* User Information */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="profile-card-header">
             <CardTitle>Personal Information</CardTitle>
             <Button
               variant="outline"
@@ -252,10 +254,10 @@ export function ProfilePage({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="profile-card-content">
           {editingUser ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="profile-grid-2col">
                 <div>
                   <Label htmlFor="name">Name</Label>
                   <Input
@@ -276,7 +278,7 @@ export function ProfilePage({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="profile-grid-2col">
                 <div>
                   <Label htmlFor="phone">Phone</Label>
                   <Input
@@ -301,21 +303,21 @@ export function ProfilePage({
               <Button onClick={handleUserSave}>Save Changes</Button>
             </>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="profile-grid-2col">
               <div>
-                <p className="text-muted-foreground">Name</p>
+                <p className="profile-info-label">Name</p>
                 <p>{userForm.name || user.name}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Email</p>
+                <p className="profile-info-label">Email</p>
                 <p>{user.email}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Phone</p>
+                <p className="profile-info-label">Phone</p>
                 <p>{userForm.phone || user.phone}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Address</p>
+                <p className="profile-info-label">Address</p>
                 <p>{userForm.address || user.address}</p>
               </div>
             </div>
@@ -326,7 +328,7 @@ export function ProfilePage({
       {/* Upcoming Appointments */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="profile-card-header">
             <div>
               <CardTitle>Upcoming Appointments</CardTitle>
               <CardDescription>Your scheduled appointments</CardDescription>
@@ -337,7 +339,7 @@ export function ProfilePage({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="appointments-list">
           {appointments && appointments.length > 0 ? (
             appointments
               .filter((apt) => apt.status === "upcoming")
@@ -356,172 +358,168 @@ export function ProfilePage({
                 return (
                   <Card
                     key={appointment._id || appointment.id}
-                    className="border-2"
+                    className="appointment-card"
                   >
-                    <CardContent className="p-4">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-start">
-                          <div className="flex items-center gap-3">
-                            <Calendar className="w-5 h-5 text-primary" />
-                            <div>
-                              <h4>
-                                {new Date(
-                                  appointment.date
-                                ).toLocaleDateString("en-US", {
-                                  weekday: "long",
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })}
-                              </h4>
-                              <div className="flex items-center gap-2 text-muted-foreground">
-                                <Clock className="w-4 h-4" />
-                                <span>{appointment.time}</span>
-                              </div>
+                    <CardContent className="profile-card-content">
+                      <div className="appointment-header">
+                        <div className="appointment-date-container">
+                          <Calendar className="appointment-icon" />
+                          <div>
+                            <h4>
+                              {new Date(
+                                appointment.date
+                              ).toLocaleDateString("en-US", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </h4>
+                            <div className="appointment-time">
+                              <Clock className="appointment-time-icon" />
+                              <span>{appointment.time}</span>
                             </div>
                           </div>
-                          <Badge
-                            variant={isBookingOnly ? "secondary" : "default"}
-                          >
-                            {isBookingOnly ? "Consultation" : "With Services"}
-                          </Badge>
                         </div>
+                        <Badge
+                          variant={isBookingOnly ? "secondary" : "default"}
+                        >
+                          {isBookingOnly ? "Consultation" : "With Services"}
+                        </Badge>
+                      </div>
 
-                        <Separator />
+                      <Separator />
 
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-1">
-                            Pet
-                          </p>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p>{appointment.pet?.name}</p>
-                            {appointment.pet?.species && (
-                              <Badge variant="outline">
-                                {appointment.pet.species}
-                              </Badge>
-                            )}
-                            <span className="text-sm text-muted-foreground">
-                              {appointment.pet?.breed} •{" "}
-                              {appointment.pet?.age} years old
-                            </span>
-                          </div>
+                      <div>
+                        <p className="pet-info-label">Pet</p>
+                        <div className="pet-details">
+                          <p>{appointment.pet?.name}</p>
+                          {appointment.pet?.species && (
+                            <Badge variant="outline">
+                              {appointment.pet.species}
+                            </Badge>
+                          )}
+                          <span className="pet-details-text">
+                            {appointment.pet?.breed} •{" "}
+                            {appointment.pet?.age} years old
+                          </span>
                         </div>
+                      </div>
 
-                        {!isBookingOnly &&
-                          appointment.services &&
-                          appointment.services.length > 0 && (
-                            <div>
-                              <p className="text-sm text-muted-foreground mb-2">
-                                Services
-                              </p>
-                              <div className="space-y-2">
-                                {appointment.services.map((service) => (
-                                  <div
-                                    key={service.id}
-                                    className="flex justify-between items-center"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <Heart className="w-4 h-4 text-muted-foreground" />
-                                      <span className="text-sm">
-                                        {service.name}
-                                      </span>
-                                      <span className="text-xs text-muted-foreground">
-                                        ({service.duration} min)
-                                      </span>
-                                    </div>
-                                    <span className="text-sm">
-                                      ${service.price}
+                      {!isBookingOnly &&
+                        appointment.services &&
+                        appointment.services.length > 0 && (
+                          <div>
+                            <p className="pet-info-label">Services</p>
+                            <div className="services-list">
+                              {appointment.services.map((service) => (
+                                <div
+                                  key={service.id}
+                                  className="service-item"
+                                >
+                                  <div className="pet-details">
+                                    <Heart className="service-icon" />
+                                    <span className="service-name">
+                                      {service.name}
+                                    </span>
+                                    <span className="service-duration">
+                                      ({service.duration} min)
                                     </span>
                                   </div>
-                                ))}
-                              </div>
+                                  <span className="service-price">
+                                    ${service.price}
+                                  </span>
+                                </div>
+                              ))}
                             </div>
-                          )}
-
-                        {appointment.notes && (
-                          <div>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              Notes
-                            </p>
-                            <p className="text-sm bg-muted p-2 rounded">
-                              {appointment.notes}
-                            </p>
                           </div>
                         )}
 
-                        <Separator />
-
-                        <div className="space-y-2">
-                          {isBookingOnly ? (
-                            <div className="flex items-center justify-between bg-green-50 dark:bg-green-950 p-3 rounded-lg">
-                              <div className="flex items-center gap-2">
-                                <CheckCircle className="w-5 h-5 text-green-600" />
-                                <div>
-                                  <p className="text-sm">Free Consultation</p>
-                                  <p className="text-xs text-muted-foreground">
-                                    No payment required
-                                  </p>
-                                </div>
-                              </div>
-                              <p>$0.00</p>
-                            </div>
-                          ) : (
-                            <>
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm text-muted-foreground">
-                                  Total Amount:
-                                </span>
-                                <span>${total.toFixed(2)}</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm">
-                                    Deposit Paid (50%):
-                                  </span>
-                                  {depositPaid >= depositAmount ? (
-                                    <CheckCircle className="w-4 h-4 text-green-600" />
-                                  ) : (
-                                    <AlertCircle className="w-4 h-4 text-amber-600" />
-                                  )}
-                                </div>
-                                <span
-                                  className={
-                                    depositPaid >= depositAmount
-                                      ? "text-green-600"
-                                      : "text-amber-600"
-                                  }
-                                >
-                                  ${depositPaid.toFixed(2)}
-                                </span>
-                              </div>
-                              <div className="flex justify-between items-center pt-2 border-t">
-                                <span>Balance Due:</span>
-                                <span
-                                  className={
-                                    balanceDue > 0 ? "" : "text-green-600"
-                                  }
-                                >
-                                  ${balanceDue.toFixed(2)}
-                                </span>
-                              </div>
-                              {balanceDue > 0 && (
-                                <p className="text-xs text-muted-foreground">
-                                  Payable at your appointment
-                                </p>
-                              )}
-                            </>
-                          )}
+                      {appointment.notes && (
+                        <div>
+                          <p className="pet-info-label">Notes</p>
+                          <p className="appointment-notes">
+                            {appointment.notes}
+                          </p>
                         </div>
+                      )}
+
+                      <Separator />
+
+                      <div className="payment-info">
+                        {isBookingOnly ? (
+                          <div className="payment-free">
+                            <div className="payment-free-content">
+                              <CheckCircle className="payment-free-icon" />
+                              <div>
+                                <p className="payment-free-text">
+                                  Free Consultation
+                                </p>
+                                <p className="payment-free-subtext">
+                                  No payment required
+                                </p>
+                              </div>
+                            </div>
+                            <p>$0.00</p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="payment-row">
+                              <span className="payment-label">
+                                Total Amount:
+                              </span>
+                              <span>${total.toFixed(2)}</span>
+                            </div>
+                            <div className="payment-row">
+                              <div className="payment-row-with-icon">
+                                <span className="payment-label-with-status">
+                                  Deposit Paid (50%):
+                                </span>
+                                {depositPaid >= depositAmount ? (
+                                  <CheckCircle className="payment-status-icon payment-status-success" />
+                                ) : (
+                                  <AlertCircle className="payment-status-icon payment-status-warning" />
+                                )}
+                              </div>
+                              <span
+                                className={
+                                  depositPaid >= depositAmount
+                                    ? "payment-balance-due"
+                                    : ""
+                                }
+                              >
+                                ${depositPaid.toFixed(2)}
+                              </span>
+                            </div>
+                            <div className="payment-balance-row">
+                              <span>Balance Due:</span>
+                              <span
+                                className={
+                                  balanceDue > 0 ? "" : "payment-balance-due"
+                                }
+                              >
+                                ${balanceDue.toFixed(2)}
+                              </span>
+                            </div>
+                            {balanceDue > 0 && (
+                              <p className="payment-note">
+                                Payable at your appointment
+                              </p>
+                            )}
+                          </>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
                 );
               })
           ) : (
-            <div className="text-center py-8">
-              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-              <h3 className="text-lg font-semibold">No Upcoming Appointments</h3>
-              <p className="text-muted-foreground mb-4">
+            <div className="empty-appointments">
+              <Calendar className="empty-icon" />
+              <h3 className="text-lg font-semibold">
+                No Upcoming Appointments
+              </h3>
+              <p className="empty-text">
                 You do not have any scheduled appointments yet.
               </p>
               <Button onClick={() => onNavigate("booking")}>
@@ -536,7 +534,7 @@ export function ProfilePage({
       {/* Pets */}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="pets-header">
             <div>
               <CardTitle>My Pets</CardTitle>
               <CardDescription>Manage your pet information</CardDescription>
@@ -548,16 +546,16 @@ export function ProfilePage({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="profile-card-content">
           {pets.map((pet) => (
             <div
               key={pet._id || pet.id}
-              className="flex justify-between items-center p-4 border rounded-lg"
+              className="pet-card"
             >
-              <div className="flex items-center space-x-4">
+              <div className="pet-info">
                 <div>
                   <h4>{pet.name}</h4>
-                  <p className="text-muted-foreground">
+                  <p className="pet-details-container">
                     {pet.breed} • {pet.age} years old
                   </p>
                 </div>
@@ -570,9 +568,9 @@ export function ProfilePage({
           ))}
 
           {addingPet && (
-            <div className="p-4 border rounded-lg bg-muted space-y-4">
+            <div className="add-pet-form">
               <h4 className="font-semibold">Add New Pet</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="profile-grid-2col">
                 <div>
                   <Label htmlFor="petName">Name</Label>
                   <Input
@@ -622,7 +620,7 @@ export function ProfilePage({
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="add-pet-buttons">
                 <Button onClick={handleAddPet}>Add Pet</Button>
                 <Button variant="outline" onClick={() => setAddingPet(false)}>
                   Cancel

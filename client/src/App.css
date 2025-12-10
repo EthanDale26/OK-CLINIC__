@@ -1448,6 +1448,8 @@ select,
 
 .bg-card {
   background-color: var(--card);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
 }
 
 .text-card-foreground {
@@ -1517,4 +1519,20 @@ select,
 .btn-pill-outline {
   background-color: #ffffff;
   color: #020617;
+}
+
+.profile-input {
+  /* width: 100%; */
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--input-background);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  margin-left: 0.5rem;
+}
+
+.profile-input:focus {
+  border-color: var(--primary);
+  outline: none;
 }

@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import "../edit/ProfilePage.css";
 
-
 /* ---------- Reusable UI primitives ---------- */
 
 function Card({ children, className = "", ...props }) {
@@ -89,10 +88,7 @@ function Input(props) {
 }
 function Label({ children, ...props }) {
   return (
-    <label
-      className="text-sm font-medium leading-none mb-2 block"
-      {...props}
-    >
+    <label className="text-sm font-medium leading-none mb-2 block" {...props}>
       {children}
     </label>
   );
@@ -366,14 +362,15 @@ export function ProfilePage({
                           <Calendar className="appointment-icon" />
                           <div>
                             <h4>
-                              {new Date(
-                                appointment.date
-                              ).toLocaleDateString("en-US", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
+                              {new Date(appointment.date).toLocaleDateString(
+                                "en-US",
+                                {
+                                  weekday: "long",
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
                             </h4>
                             <div className="appointment-time">
                               <Clock className="appointment-time-icon" />
@@ -400,8 +397,8 @@ export function ProfilePage({
                             </Badge>
                           )}
                           <span className="pet-details-text">
-                            {appointment.pet?.breed} •{" "}
-                            {appointment.pet?.age} years old
+                            {appointment.pet?.breed} • {appointment.pet?.age}{" "}
+                            years old
                           </span>
                         </div>
                       </div>
@@ -413,10 +410,7 @@ export function ProfilePage({
                             <p className="pet-info-label">Services</p>
                             <div className="services-list">
                               {appointment.services.map((service) => (
-                                <div
-                                  key={service.id}
-                                  className="service-item"
-                                >
+                                <div key={service.id} className="service-item">
                                   <div className="pet-details">
                                     <Heart className="service-icon" />
                                     <span className="service-name">
@@ -548,10 +542,7 @@ export function ProfilePage({
 
         <CardContent className="profile-card-content">
           {pets.map((pet) => (
-            <div
-              key={pet._id || pet.id}
-              className="pet-card"
-            >
+            <div key={pet._id || pet.id} className="pet-card">
               <div className="pet-info">
                 <div>
                   <h4>{pet.name}</h4>

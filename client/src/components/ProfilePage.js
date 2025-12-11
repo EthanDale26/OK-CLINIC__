@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import "../edit/ProfilePage.css";
 
-
 /* ---------- Reusable UI primitives ---------- */
 
 function Card({ children, className = "", ...props }) {
@@ -51,23 +50,26 @@ function CardContent({ children, className = "", ...props }) {
 function Button({
   children,
   variant = "default",
-  size = "default",
+  size = "md",
   className = "",
   ...props
 }) {
   const base =
     "inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+
   const variants = {
-    default:
-      "bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 text-sm",
+    default: "bg-primary text-primary-foreground hover:bg-primary/90",
     outline:
-      "border border-border bg-background hover:bg-accent hover:text-accent-foreground px-4 py-2 text-sm",
-    ghost: "hover:bg-accent hover:text-accent-foreground px-2 py-1 text-sm",
+      "border border-border bg-background hover:bg-accent hover:text-accent-foreground",
+    ghost: "bg-transparent text-primary hover:bg-accent",
   };
+
   const sizes = {
-    default: "",
-    sm: "h-8 px-2 text-xs",
+    sm: "h-7 px-2 text-xs",
+    md: "h-8 px-3 text-sm",
+    lg: "h-9 px-4 text-sm",
   };
+
   return (
     <button
       className={`${base} ${variants[variant] || ""} ${
@@ -79,20 +81,18 @@ function Button({
     </button>
   );
 }
+
 function Input(props) {
   return (
     <input
-      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm profile-input"
       {...props}
     />
   );
 }
 function Label({ children, ...props }) {
   return (
-    <label
-      className="text-sm font-medium leading-none mb-2 block"
-      {...props}
-    >
+    <label className="text-sm font-medium leading-none mb-2 block" {...props}>
       {children}
     </label>
   );
@@ -221,11 +221,20 @@ export function ProfilePage({
       <div className="profile-header">
         <h1 className="text-2xl font-semibold">My Profile</h1>
         <div className="profile-header-buttons">
-          <Button onClick={() => onNavigate("booking")}>
+          <Button
+            size="md"
+            className="btn-pill btn-pill-primary"
+            onClick={() => onNavigate("booking")}
+          >
             <Calendar className="w-4 h-4 mr-2" />
             Book Appointment
           </Button>
-          <Button variant="outline" onClick={() => onNavigate("invoices")}>
+          <Button
+            variant="outline"
+            size="md"
+            className="btn-pill btn-pill-secondary"
+            onClick={() => onNavigate("invoices")}
+          >
             <DollarSign className="w-4 h-4 mr-2" />
             Manage Balance
           </Button>
@@ -246,6 +255,7 @@ export function ProfilePage({
             <Button
               variant="outline"
               size="sm"
+              className="btn-pill btn-pill-outline"
               onClick={() => setEditingUser((prev) => !prev)}
             >
               <Edit className="w-4 h-4 mr-2" />
@@ -300,7 +310,13 @@ export function ProfilePage({
                   />
                 </div>
               </div>
-              <Button onClick={handleUserSave}>Save Changes</Button>
+              <Button
+                size="md"
+                className="btn-pill btn-pill-primary"
+                onClick={handleUserSave}
+              >
+                Save Changes
+              </Button>
             </>
           ) : (
             <div className="profile-grid-2col">
@@ -333,7 +349,12 @@ export function ProfilePage({
               <CardTitle>Upcoming Appointments</CardTitle>
               <CardDescription>Your scheduled appointments</CardDescription>
             </div>
-            <Button variant="outline" onClick={() => onNavigate("invoices")}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="btn-pill btn-pill-outline"
+              onClick={() => onNavigate("invoices")}
+            >
               View All Invoices
             </Button>
           </div>
@@ -366,14 +387,15 @@ export function ProfilePage({
                           <Calendar className="appointment-icon" />
                           <div>
                             <h4>
-                              {new Date(
-                                appointment.date
-                              ).toLocaleDateString("en-US", {
-                                weekday: "long",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
+                              {new Date(appointment.date).toLocaleDateString(
+                                "en-US",
+                                {
+                                  weekday: "long",
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
                             </h4>
                             <div className="appointment-time">
                               <Clock className="appointment-time-icon" />
@@ -400,8 +422,8 @@ export function ProfilePage({
                             </Badge>
                           )}
                           <span className="pet-details-text">
-                            {appointment.pet?.breed} •{" "}
-                            {appointment.pet?.age} years old
+                            {appointment.pet?.breed} • {appointment.pet?.age}{" "}
+                            years old
                           </span>
                         </div>
                       </div>
@@ -413,10 +435,7 @@ export function ProfilePage({
                             <p className="pet-info-label">Services</p>
                             <div className="services-list">
                               {appointment.services.map((service) => (
-                                <div
-                                  key={service.id}
-                                  className="service-item"
-                                >
+                                <div key={service.id} className="service-item">
                                   <div className="pet-details">
                                     <Heart className="service-icon" />
                                     <span className="service-name">
@@ -522,9 +541,13 @@ export function ProfilePage({
               <p className="empty-text">
                 You do not have any scheduled appointments yet.
               </p>
-              <Button onClick={() => onNavigate("booking")}>
+              <Button
+                size="md"
+                className="btn-pill btn-pill-primary"
+                onClick={() => onNavigate("booking")}
+              >
                 <Calendar className="w-4 h-4 mr-2" />
-                Book Your First Appointment
+                Book Your Appointment
               </Button>
             </div>
           )}
@@ -539,7 +562,11 @@ export function ProfilePage({
               <CardTitle>My Pets</CardTitle>
               <CardDescription>Manage your pet information</CardDescription>
             </div>
-            <Button onClick={() => setAddingPet(true)}>
+            <Button
+              size="md"
+              className="btn-pill btn-pill-primary"
+              onClick={() => setAddingPet(true)}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Pet
             </Button>
@@ -548,10 +575,7 @@ export function ProfilePage({
 
         <CardContent className="profile-card-content">
           {pets.map((pet) => (
-            <div
-              key={pet._id || pet.id}
-              className="pet-card"
-            >
+            <div key={pet._id || pet.id} className="pet-card">
               <div className="pet-info">
                 <div>
                   <h4>{pet.name}</h4>
@@ -621,8 +645,19 @@ export function ProfilePage({
                 </div>
               </div>
               <div className="add-pet-buttons">
-                <Button onClick={handleAddPet}>Add Pet</Button>
-                <Button variant="outline" onClick={() => setAddingPet(false)}>
+                <Button
+                  size="md"
+                  className="btn-pill btn-pill-primary"
+                  onClick={handleAddPet}
+                >
+                  Add Pet
+                </Button>
+                <Button
+                  variant="outline"
+                  className="btn-pill btn-pill-outline"
+                  size="md"
+                  onClick={() => setAddingPet(false)}
+                >
                   Cancel
                 </Button>
               </div>

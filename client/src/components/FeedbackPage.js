@@ -297,13 +297,19 @@ export function FeedbackPage({ user, onNavigate }) {
                 />
               </div>
 
-              <div className="flex gap-4">
-                <Button type="submit" className="flex-1" disabled={submitting}>
+              <div className="feedback-actions-row">
+                <Button
+                  type="submit"
+                  className="feedback-primary-btn"
+                  disabled={submitting}
+                >
                   {submitting ? "Submitting..." : "Submit Feedback"}
                 </Button>
+
                 <Button
                   type="button"
                   variant="outline"
+                  className="feedback-secondary-btn"
                   onClick={() => onNavigate("profile")}
                 >
                   Cancel

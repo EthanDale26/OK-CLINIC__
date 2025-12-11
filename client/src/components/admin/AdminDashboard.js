@@ -1,4 +1,3 @@
-// src/components/admin/AdminDashboard.js
 import React, { useEffect, useState } from "react";
 import {
   DashboardTab,
@@ -26,9 +25,7 @@ export function AdminDashboard({ user, onLogout }) {
   const [pets, setPets] = useState([]);
   const [invoices, setInvoices] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
-
-  // local-only collections
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);   // now from DB
   const [services, setServices] = useState([]);
 
   // metrics
@@ -97,7 +94,7 @@ export function AdminDashboard({ user, onLogout }) {
   const [invoiceSearchTerm, setInvoiceSearchTerm] = useState("");
   const [invoiceFilter, setInvoiceFilter] = useState("all");
 
-  // Services (front-end only)
+  // Services
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [serviceForm, setServiceForm] = useState({
@@ -107,7 +104,7 @@ export function AdminDashboard({ user, onLogout }) {
     duration: "",
     status: "active",
   });
-  const [serviceSearchTerm, setServiceSearchTerm] = useState("");
+  const [serviceSearchTerm, setServiceSearchTerm] = useState("all");
   const [serviceFilter, setServiceFilter] = useState("all");
 
   // Feedback
@@ -135,8 +132,7 @@ export function AdminDashboard({ user, onLogout }) {
 
   /* ===== load initial data ===== */
 
- // load initial data
-useEffect(() => {
+ useEffect(() => {
   if (!user?.token) return;
 
   (async () => {
@@ -147,12 +143,14 @@ useEffect(() => {
         invoicesData,
         feedbacksData,
         servicesData,
+        appointmentsData,
       ] = await Promise.all([
         apiFetch("http://localhost:5000/api/admin/users"),
         apiFetch("http://localhost:5000/api/admin/pets"),
         apiFetch("http://localhost:5000/api/admin/invoices"),
         apiFetch("http://localhost:5000/api/admin/feedbacks"),
         apiFetch("http://localhost:5000/api/admin/services"),
+        apiFetch("http://localhost:5000/api/admin/appointments"), // NEW
       ]);
 
       setUsers(usersData);
@@ -160,6 +158,22 @@ useEffect(() => {
       setInvoices(invoicesData);
       setFeedbacks(feedbacksData);
       setServices(servicesData);
+
+      // map DB bookings -> appointments state used by AppointmentsTab
+      setAppointments(
+        appointmentsData.map((b) => ({
+          id: b._id,
+          clientId: b.customer?._id,
+          clientName: b.customer?.name || "",
+          petId: b.pet?._id,
+          petName: b.pet?.name || "",
+          service: (b.services || []).map((s) => s.name).join(", "),
+          date: b.date,
+          time: b.time,
+          status: b.status === "upcoming" ? "scheduled" : b.status,
+          amount: b.total || 0,
+        }))
+      );
 
       setTotalPets(petsData.length);
       setActiveUsers(usersData.length);
@@ -173,13 +187,13 @@ useEffect(() => {
           .filter((inv) => inv.status === "paid")
           .reduce((sum, inv) => sum + (inv.total || 0), 0)
       );
+      // optionally recompute todayAppointments here if you want
     } catch (err) {
       console.error("Admin data load error:", err);
       alert(`Failed to load admin data: ${err.message || "Unknown error"}`);
     }
   })();
 }, [user]);
-
 
   /* ===== COMMON HELPERS ===== */
 
@@ -204,7 +218,25 @@ useEffect(() => {
   const getOwnerName = (pet) => pet?.owner?.name || "";
   const getActiveClients = () => users;
 
-  /* ===== APPOINTMENTS (front-end only) ===== */
+  // helper used both after load and in UI
+  const getTodaysAppointmentsOnly = (list = appointments) => {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = today.getMonth();
+    const d = today.getDate();
+
+    return list.filter((apt) => {
+      if (!apt.date) return false;
+      const date = new Date(apt.date);
+      return (
+        date.getFullYear() === y &&
+        date.getMonth() === m &&
+        date.getDate() === d
+      );
+    });
+  };
+
+  /* ===== APPOINTMENTS (front-end created but now based on DB list) ===== */
 
   const calculateTotalAmount = (serviceIds) =>
     serviceIds
@@ -300,6 +332,7 @@ useEffect(() => {
     }
     setAppointmentDialogOpen(false);
     setEditingAppointment(null);
+    setTodayAppointments(getTodaysAppointmentsOnly().length);
   };
 
   const getFilteredAppointments = () =>
@@ -319,8 +352,8 @@ useEffect(() => {
     setAppointments((apps) =>
       apps.map((apt) => (apt.id === id ? { ...apt, status } : apt))
     );
+    setTodayAppointments(getTodaysAppointmentsOnly().length);
   };
-
   /* ===== PETS ===== */
 
   const getFilteredPets = () =>
@@ -799,15 +832,15 @@ const deleteService = async (id) => {
             pets={pets}
             getStatusColor={getStatusColor}
             getOwnerName={getOwnerName}
+            todaysAppointmentsList={getTodaysAppointmentsOnly()}
           />
         )}
 
-        {activeTab === "appointments" && (
+      {activeTab === "appointments" && (
           <AppointmentsTab
             appointments={appointments}
             services={services}
             users={users}
-            pets={pets}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             appointmentFilter={appointmentFilter}

@@ -15,6 +15,7 @@ export function DashboardTab({
   pets,
   getStatusColor,
   getOwnerName,
+  todaysAppointmentsList, // NEW: array of today's appointments
 }) {
   return (
     <div className="dashboard-space">
@@ -54,7 +55,7 @@ export function DashboardTab({
 
         <div className="dashboard-card">
           <div className="dashboard-card-header">
-            <span className="dashboard-muted">Today's Appointments</span>
+            <span className="dashboard-muted">Today&apos;s Appointments</span>
             <span className="dashboard-metric-icon" title="Today's Appointments">
               📅
             </span>
@@ -90,7 +91,9 @@ export function DashboardTab({
         </div>
       </div>
 
+      {/* three list cards: recent appointments, today's appointments, recent pet visits */}
       <div className="dashboard-list-grid">
+        {/* ALL recent appointments */}
         <div className="dashboard-list-card">
           <div className="dashboard-card-header">
             <div>
@@ -123,6 +126,40 @@ export function DashboardTab({
           </div>
         </div>
 
+        {/* TODAY'S appointments only */}
+        <div className="dashboard-list-card">
+          <div className="dashboard-card-header">
+            <div>
+              <div className="dashboard-section-title">Today&apos;s Appointments</div>
+              <div className="dashboard-muted">Appointments scheduled for today</div>
+            </div>
+          </div>
+          <div className="dashboard-list-content">
+            {todaysAppointmentsList.length === 0 && (
+              <div className="dashboard-muted">
+                No appointments scheduled for today.
+              </div>
+            )}
+            <ul className="dashboard-list">
+              {todaysAppointmentsList.map((apt) => (
+                <li key={apt.id || apt._id} className="dashboard-list-item">
+                  <div>
+                    <div>
+                      {apt.clientName} - {apt.petName}
+                    </div>
+                    <div className="dashboard-muted">{apt.service}</div>
+                    <div className="dashboard-muted">Today at {apt.time}</div>
+                  </div>
+                  <span className={getStatusColor(apt.status)}>
+                    {apt.status}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Recent Pet Visits */}
         <div className="dashboard-list-card">
           <div className="dashboard-card-header">
             <div>
@@ -231,7 +268,7 @@ export function AppointmentsTab({
               <th>Client</th>
               <th>Pet</th>
               <th>Service</th>
-              <th>Date & Time</th>
+              <th>Date &amp; Time</th>
               <th>Amount</th>
               <th>Status</th>
               <th style={{ textAlign: "right" }}>Actions</th>
@@ -328,7 +365,7 @@ export function PetsTab({
   openPetDialog,
   handleEditPet,
   requestDeletePet,
-  updatePetStatus, // make sure AdminDashboard passes this
+  updatePetStatus,
 }) {
   return (
     <div className="pets-space">

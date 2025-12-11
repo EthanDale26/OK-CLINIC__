@@ -112,7 +112,13 @@ function App() {
     setPage(PAGES.PROFILE);
   };
 
-  const showNav = ![PAGES.LOGIN, PAGES.SIGNUP, PAGES.RESET].includes(page);
+  // Hide navigation on login, signup, reset, and admin pages
+  const showNav = ![
+    PAGES.LOGIN,
+    PAGES.SIGNUP,
+    PAGES.RESET,
+    PAGES.ADMIN,
+  ].includes(page);
 
   return (
     <div className="App">
@@ -131,10 +137,10 @@ function App() {
           onNavigateToPasswordReset={() => setPage(PAGES.RESET)}
         />
       )}
-      {page === PAGES.ADMIN && (
-  <AdminDashboard user={user} onLogout={handleLogout} />
-)}
 
+      {page === PAGES.ADMIN && (
+        <AdminDashboard user={user} onLogout={handleLogout} />
+      )}
 
       {page === PAGES.SIGNUP && (
         <SignupPage
@@ -145,10 +151,6 @@ function App() {
 
       {page === PAGES.RESET && (
         <PasswordResetPage onNavigateToLogin={() => setPage(PAGES.LOGIN)} />
-      )}
-
-      {page === PAGES.ADMIN && (
-        <AdminDashboard user={user} onLogout={handleLogout} />
       )}
 
       {page === PAGES.PROFILE && (

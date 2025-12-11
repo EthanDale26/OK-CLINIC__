@@ -24,6 +24,7 @@ const Booking = require("./models/Booking");
 
 const app = express();
 
+// simple logger
 app.use((req, res, next) => {
   console.log("REQ", req.method, req.url);
   next();
@@ -38,12 +39,19 @@ app.use(
 
 app.use(express.json());
 
-// Public routes
+/**
+ * ROUTES
+ *
+ * 1) Public auth routes (signup/signin/reset) are allowed by authMiddleware
+ *    because it checks publicAuthPaths.
+ * 2) authMiddleware MUST be before protected routers so req.user is set.
+ */
+
+// Auth routes (some endpoints public, some protected like update-profile)
+app.use(authMiddleware);              // apply globally first
 app.use("/api/auth", authRoutes);
 
-// Protected routes
-app.use(authMiddleware);
-
+// Other protected routes
 app.use("/api/pets", petRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/feedback", feedbackRoutes);

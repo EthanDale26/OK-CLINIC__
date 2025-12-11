@@ -175,16 +175,19 @@ router.post("/signin", async (req, res) => {
 /* ---------------- PROFILE & PASSWORD RESET ---------------- */
 
 // UPDATE PROFILE
+// UPDATE PROFILE in routes/auth.js
 router.put("/update-profile", async (req, res) => {
-  if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-
   const { name, phone, address } = req.body;
 
   const user = await User.findByIdAndUpdate(
-    req.user._id,
+    req.user._id,                 // set by authMiddleware
     { name, phone, address },
     { new: true }
   ).select("-password -resetCode -resetCodeExpiry");
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
 
   res.json(user);
 });

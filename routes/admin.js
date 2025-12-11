@@ -1,8 +1,13 @@
+// routes/admin.js
+console.log("admin router file loaded");
+
+
 const express = require('express');
 const User = require('../models/User');
 const Pet = require('../models/Pet');
 const Invoice = require('../models/Invoice');
 const Feedback = require('../models/Feedback');
+const Booking = require('../models/Booking'); // <--- ADD: your appointment model
 
 const router = express.Router();
 
@@ -151,8 +156,8 @@ router.delete('/invoices/:id', requireAdmin, async (req, res) => {
 router.get('/feedbacks', requireAdmin, async (req, res) => {
   try {
     const feedbacks = await Feedback.find()
-      .populate('userId', 'name email')   // use userId
-      .sort({ submittedAt: -1 });         // use submittedAt
+      .populate('userId', 'name email')
+      .sort({ submittedAt: -1 });
 
     res.json(feedbacks);
   } catch (err) {
@@ -170,7 +175,7 @@ router.put('/feedbacks/:id', requireAdmin, async (req, res) => {
       req.params.id,
       { status, adminNote },
       { new: true }
-    ).populate('userId', 'name email');   // use userId
+    ).populate('userId', 'name email');
 
     if (!feedback) return res.status(404).json({ error: 'Feedback not found' });
     res.json(feedback);
@@ -180,7 +185,6 @@ router.put('/feedbacks/:id', requireAdmin, async (req, res) => {
   }
 });
 
-
 // DELETE /api/admin/feedbacks/:id
 router.delete('/feedbacks/:id', requireAdmin, async (req, res) => {
   try {
@@ -188,6 +192,24 @@ router.delete('/feedbacks/:id', requireAdmin, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('DELETE /api/admin/feedbacks/:id error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+/* ========= APPOINTMENTS (NEW) ========= */
+
+// GET /api/admin/appointments  -> all appointments for dashboard & table
+router.get('/appointments', requireAdmin, async (req, res) => {
+  console.log("HIT /api/admin/appointments");   // log each request
+  try {
+    const appointments = await Booking.find()
+      .populate('customer', 'name email')
+      .populate('pet', 'name species')
+      .sort({ appointmentDateTime: 1 });
+
+    res.json(appointments);
+  } catch (err) {
+    console.error('GET /api/admin/appointments error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
